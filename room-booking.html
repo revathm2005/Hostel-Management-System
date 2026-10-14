@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Room Booking | Hostel Management</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f7f2;color:#18372c;font-family:Arial,sans-serif}
+header{padding:18px 5%;background:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border-bottom:1px solid #ddd}
+.logo{font-size:21px;font-weight:bold;color:#245b43;text-decoration:none}
+nav{display:flex;gap:15px;flex-wrap:wrap}
+nav a{font-size:13px;text-decoration:none;color:#245b43;font-weight:bold}
+main{max-width:1100px;margin:auto;padding:30px 20px}
+.hero{text-align:center;margin-bottom:30px}
+.hero h1{font-size:36px;margin:10px}
+.hero p{color:#718078;line-height:1.6}
+.panel{background:white;border:1px solid #e0e8df;border-radius:13px;padding:24px;margin-bottom:22px;box-shadow:0 5px 18px #17352c08}
+h2{font-size:21px;margin:0 0 20px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:8px}
+input,select{width:100%;padding:12px;border:1px solid #d5dfd5;border-radius:7px;font-size:14px;background:white;color:#18372c}
+.field{min-width:0}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px}
+.stat{background:#f0f6ee;padding:15px;border-radius:8px}
+.stat span{display:block;color:#718078;font-size:12px;margin-bottom:8px}
+.stat strong{font-size:23px;color:#245b43}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin-bottom:18px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px}
+.room-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:11px}
+.room{border:2px solid transparent;border-radius:9px;min-height:90px;padding:12px 5px;cursor:pointer;overflow-wrap:anywhere}
+.room strong,.room span{display:block;margin-bottom:7px}
+.room strong{font-size:14px}
+.room span{font-size:11px}
+.room.vacant{background:#d9f0df;border-color:#a6d4b1;color:#245c35}
+.room.occupied{background:#a87950;border-color:#956641;color:white;cursor:not-allowed}
+.room.selected{background:#398365;border-color:#174d38;color:white}
+.room:disabled{opacity:1}
+.empty{padding:22px;text-align:center;background:#f5f7f3;border-radius:8px;color:#718078;grid-column:1/-1}
+.note{display:none;padding:13px;border-radius:8px;margin-top:15px;font-size:13px;line-height:1.7;overflow-wrap:anywhere}
+.note.error{display:block;background:#fbe9e7;color:#942f2f}
+.note.info{display:block;background:#edf3f7;color:#31566d}
+.selected-info{display:none;background:#eff6ef;padding:13px;border-radius:8px;margin-top:15px;font-size:13px;line-height:1.7}
+.selected-info.show{display:block}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.btn{border:0;border-radius:7px;padding:13px 18px;font-size:13px;font-weight:bold;cursor:pointer}
+.btn-primary{background:#398365;color:white}
+.btn-secondary{background:#eaf0e9;color:#193b32}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.home{text-align:center;margin:35px}
+.home a{display:inline-block;background:#102b22;color:white;text-decoration:none;padding:13px 22px;border-radius:8px;font-weight:bold;font-size:13px}
+footer{text-align:center;padding:20px;color:#718078;font-size:12px}
+.popup-overlay{display:none;position:fixed;inset:0;background:#102b2299;z-index:1000;align-items:center;justify-content:center;padding:20px}
+.popup-overlay.show{display:flex}
+.popup{background:white;border-radius:16px;padding:30px;max-width:430px;width:100%;text-align:center;box-shadow:0 15px 50px #0003}
+.popup-icon{width:65px;height:65px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 15px;background:#e0f5e7;color:#21834a;font-size:35px}
+.popup h2{margin-bottom:10px}
+.popup p{color:#66766d;font-size:14px;line-height:1.7;overflow-wrap:anywhere}
+.popup-details{text-align:left;background:#f3f7f1;border-radius:9px;padding:14px;font-size:13px;line-height:2;margin:18px 0}
+.popup-details strong{color:#245b43}
+@media(max-width:700px){main{padding:20px 12px}.panel{padding:17px}.form-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.room-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero h1{font-size:29px}}
+</style>
+</head>
+
+<body>
+<header>
+<a class="logo" href="index.html">HOSTELHUB</a>
+<nav>
+<a href="index.html">Home</a>
+<a href="block.html">Blocks</a>
+<a href="room-pics.html">Room Pics</a>
+<a href="room-booking.html">Room Booking</a>
+<a href="manage-students.html">Manage Students</a>
+</nav>
+</header>
+
+<main>
+<section class="hero">
+<p>HOSTEL ADMINISTRATION</p>
+<h1>Room Booking</h1>
+<p>Select a block, floor and vacant room, then register the student.</p>
+</section>
+
+<section class="panel">
+<h2>1. Select Block and Floor</h2>
+<div class="form-grid">
+<div>
+<label for="block">Select Block</label>
+<select id="block">
+<option value="">-- Choose Block --</option>
+<option value="A">Block A</option>
+<option value="B">Block B</option>
+<option value="C">Block C</option>
+</select>
+</div>
+<div>
+<label for="floor">Select Floor</label>
+<select id="floor" disabled>
+<option value="">-- Choose Block First --</option>
+</select>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><span>Total Rooms</span><strong id="total">0</strong></div>
+<div class="stat"><span>Occupied Rooms</span><strong id="occupied">0</strong></div>
+<div class="stat"><span>Vacant Rooms</span><strong id="vacant">0</strong></div>
+</div>
+</section>
+
+<section class="panel">
+<h2>2. Select a Room</h2>
+<div class="legend">
+<span><i class="dot" style="background:#70b985"></i>Vacant</span>
+<span><i class="dot" style="background:#a87950"></i>Full / Occupied</span>
+<span><i class="dot" style="background:#398365"></i>Selected</span>
+</div>
+<div id="rooms" class="room-grid">
+<div class="empty">Select a block and floor to see rooms.</div>
+</div>
+<div id="selected-info" class="selected-info"></div>
+<div id="room-message" class="note"></div>
+</section>
+
+<section class="panel">
+<h2>3. Insert Student and Book Room</h2>
+<p style="color:#718078;font-size:13px;line-height:1.7">Enter the student's details. A room must be selected before booking.</p>
+<form id="booking-form">
+<div class="form-grid">
+<div>
+<label for="roll">Student Roll Number</label>
+<input id="roll" maxlength="30" required placeholder="Enter college roll number">
+</div>
+<div>
+<label for="name">Student Name</label>
+<input id="name" maxlength="100" required placeholder="Enter full name">
+</div>
+<div>
+<label for="phone">Phone Number</label>
+<input id="phone" type="tel" maxlength="15" pattern="[0-9+\-\s]{10,15}" required placeholder="Enter phone number">
+</div>
+<div>
+<label for="room-display">Selected Room</label>
+<input id="room-display" readonly required placeholder="Select a vacant room above">
+</div>
+</div>
+<div class="actions">
+<button id="book" class="btn btn-primary" type="submit" disabled>Book Room and Insert Student</button>
+<button class="btn btn-secondary" type="reset">Clear Form</button>
+</div>
+</form>
+<div id="booking-message" class="note"></div>
+</section>
+
+<div class="home"><a href="index.html">← Go to Homepage</a></div>
+</main>
+
+<footer>Hostel Management System</footer>
+
+<!-- Booking success popup -->
+<div id="success-overlay" class="popup-overlay" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+<div class="popup">
+<div class="popup-icon">✓</div>
+<h2 id="popup-title">Booking Successful!</h2>
+<p id="popup-description">The student has been registered successfully.</p>
+<div class="popup-details" id="popup-details"></div>
+<button type="button" class="btn btn-primary" id="popup-close">Continue</button>
+</div>
+</div>
+
+<script>
+const config={
+ A:{floors:5,capacity:1,ac:f=>f<=3?'Non-AC':'AC'},
+ B:{floors:4,capacity:4,ac:f=>f<=2?'Non-AC':'AC'},
+ C:{floors:6,capacity:10,ac:f=>f<=3?'Non-AC':'AC'}
+};
+const $=id=>document.getElementById(id);
+let rooms=[],selectedRoom=null,requestId=0;
+
+function showNote(id,text,type='info'){
+ $(id).textContent=text;
+ $(id).className='note '+type;
+}
+function hideNote(id){
+ $(id).textContent='';
+ $(id).className='note';
+}
+function clearSelection(){
+ selectedRoom=null;
+ $('selected-info').textContent='';
+ $('selected-info').classList.remove('show');
+ $('room-display').value='';
+ $('book').disabled=true;
+}
+function showEmpty(text){
+ rooms=[];
+ clearSelection();
+ $('total').textContent='0';
+ $('occupied').textContent='0';
+ $('vacant').textContent='0';
+ $('rooms').innerHTML='';
+ const el=document.createElement('div');
+ el.className='empty';
+ el.textContent=text;
+ $('rooms').appendChild(el);
+}
+
+$('block').addEventListener('change',()=>{
+ const block=$('block').value;
+ $('floor').innerHTML='';
+ $('floor').disabled=!block;
+ hideNote('room-message');
+ hideNote('booking-message');
+ clearSelection();
+
+ if(!block){
+  $('floor').add(new Option('-- Choose Block First --',''));
+  showEmpty('Select a block and floor to see rooms.');
+  return;
+ }
+
+ $('floor').add(new Option('-- Choose Floor --',''));
+ for(let f=1;f<=config[block].floors;f++){
+  $('floor').add(new Option(`Floor ${f} — ${config[block].ac(f)}`,String(f)));
+ }
+ showEmpty('Choose a floor to see rooms.');
+});
+
+$('floor').addEventListener('change',loadRooms);
+
+async function loadRooms(){
+ const block=$('block').value;
+ const floor=Number($('floor').value);
+ const id=++requestId;
+
+ clearSelection();
+ hideNote('room-message');
+
+ if(!block||!floor){
+  showEmpty('Select a block and floor to see rooms.');
+  return;
+ }
+
+ $('rooms').innerHTML='<div class="empty">Loading rooms...</div>';
+
+ try{
+  const response=await fetch(`/api/rooms?block=${encodeURIComponent(block)}&floor=${floor}`);
+  const data=await response.json();
+
+  if(!response.ok)throw new Error(data.message||data.error||'Unable to load rooms.');
+  if(id!==requestId)return;
+  if(!Array.isArray(data))throw new Error('Unexpected rooms API response.');
+
+  rooms=data;
+  renderRooms();
+ }catch(error){
+  if(id!==requestId)return;
+  showEmpty('Rooms could not be loaded.');
+  showNote('room-message',error.message,'error');
+ }
+}
+
+function renderRooms(){
+ $('rooms').innerHTML='';
+
+ if(rooms.length===0){
+  showEmpty('No rooms were returned for this floor.');
+  return;
+ }
+
+ let full=0,freeRooms=0;
+
+ rooms.forEach(room=>{
+  const capacity=Number(room.capacity);
+  const occupied=Number(room.occupied);
+  const free=Math.max(0,capacity-occupied);
+  const isVacant=free>0;
+
+  if(isVacant)freeRooms++;
+  else full++;
+
+  const button=document.createElement('button');
+  button.type='button';
+  button.className='room '+(isVacant?'vacant':'occupied');
+  button.disabled=!isVacant;
+
+  const title=document.createElement('strong');
+  title.textContent='Room '+room.room_number;
+
+  const status=document.createElement('span');
+  status.textContent=isVacant?`${free} vacancy${free===1?'':'ies'}`:'Full';
+
+  button.append(title,status);
+
+  if(isVacant)button.addEventListener('click',()=>chooseRoom(room,button));
+
+  $('rooms').appendChild(button);
+ });
+
+ $('total').textContent=rooms.length;
+ $('occupied').textContent=full;
+ $('vacant').textContent=freeRooms;
+
+ const block=$('block').value;
+ const floor=Number($('floor').value);
+ showNote('room-message',`Block ${block} · Floor ${floor} · ${config[block].ac(floor)}`);
+}
+
+function chooseRoom(room,button){
+ selectedRoom=room;
+
+ document.querySelectorAll('.room.selected').forEach(el=>el.classList.remove('selected'));
+ button.classList.add('selected');
+
+ $('room-display').value=`Block ${room.block_name} / Floor ${room.floor_number} / Room ${room.room_number}`;
+ $('selected-info').textContent=`Selected: Block ${room.block_name}, Floor ${room.floor_number}, Room ${room.room_number}.`;
+ $('selected-info').classList.add('show');
+ $('book').disabled=false;
+ hideNote('booking-message');
+}
+
+function showSuccess(data,roomNumber){
+ $('popup-description').textContent='The student has been inserted and the room booking is confirmed.';
+
+ $('popup-details').innerHTML='';
+ const details=[
+  ['Student Name',data.name],
+  ['Roll Number',data.rollNo],
+  ['Phone Number',data.phone],
+  ['Block','Block '+data.block],
+  ['Floor','Floor '+data.floor],
+  ['Room','Room '+roomNumber]
+ ];
+
+ details.forEach(([label,value])=>{
+  const row=document.createElement('div');
+  const strong=document.createElement('strong');
+  strong.textContent=label+': ';
+  row.appendChild(strong);
+  row.appendChild(document.createTextNode(value));
+  $('popup-details').appendChild(row);
+ });
+
+ $('success-overlay').classList.add('show');
+ $('popup-close').focus();
+}
+
+$('popup-close').addEventListener('click',()=>{
+ $('success-overlay').classList.remove('show');
+});
+$('success-overlay').addEventListener('click',event=>{
+ if(event.target===$('success-overlay')){
+  $('success-overlay').classList.remove('show');
+ }
+});
+
+$('booking-form').addEventListener('submit',async event=>{
+ event.preventDefault();
+ hideNote('booking-message');
+
+ if(!selectedRoom){
+  showNote('booking-message','Please select a vacant room first.','error');
+  return;
+ }
+
+ const data={
+  rollNo:$('roll').value.trim(),
+  name:$('name').value.trim(),
+  phone:$('phone').value.trim(),
+  block:$('block').value,
+  floor:Number($('floor').value),
+  room_id:Number(selectedRoom.room_id)
+ };
+
+ if(!data.rollNo||!data.name||!data.phone){
+  showNote('booking-message','Please complete all student details.','error');
+  return;
+ }
+
+ const roomNumber=selectedRoom.room_number;
+ $('book').disabled=true;
+ $('book').textContent='Booking...';
+
+ try{
+  const response=await fetch('/api/bookings',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify(data)
+  });
+
+  const result=await response.json();
+
+  if(!response.ok){
+   throw new Error(result.message||result.error||'Booking failed.');
+  }
+
+  // Display popup only after the backend confirms success.
+  $('booking-form').reset();
+  clearSelection();
+  showSuccess(data,roomNumber);
+
+  // Refresh room occupancy from MySQL.
+  await loadRooms();
+
+ }catch(error){
+  showNote('booking-message',error.message,'error');
+ }finally{
+  $('book').textContent='Book Room and Insert Student';
+  $('book').disabled=!selectedRoom;
+ }
+});
+
+$('booking-form').addEventListener('reset',()=>{
+ setTimeout(()=>{
+  clearSelection();
+  hideNote('booking-message');
+ },0);
+});
+</script>
+</body>
+</html>

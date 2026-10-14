@@ -1,0 +1,307 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Gallery | Hostel Management System</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .gallery-page {
+            padding: 50px 7% 70px;
+        }
+
+        .gallery-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .gallery-heading h1 {
+            color: #10231f;
+            font-size: clamp(30px, 4vw, 42px);
+            margin-bottom: 10px;
+        }
+
+        .gallery-heading p {
+            color: #718078;
+            font-size: 14px;
+        }
+
+        .block-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 35px;
+        }
+
+        .block-tabs button {
+            padding: 12px 28px;
+            border: 1px solid #398365;
+            border-radius: 7px;
+            background: white;
+            color: #193b32;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .block-tabs button:hover,
+        .block-tabs button.selected {
+            background: #398365;
+            color: white;
+        }
+
+        .gallery-title {
+            margin-bottom: 22px;
+        }
+
+        .gallery-title h2 {
+            color: #10231f;
+            font-size: 27px;
+            margin-bottom: 5px;
+        }
+
+        .gallery-title p {
+            color: #718078;
+            font-size: 13px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-card {
+            overflow: hidden;
+            border: 1px solid #e6eae5;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 5px 18px rgba(16, 35, 31, .05);
+        }
+
+        .gallery-image {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            background: #dce8df;
+        }
+
+        .gallery-image img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .3s;
+        }
+
+        .gallery-card:hover .gallery-image img {
+            transform: scale(1.04);
+        }
+
+        .gallery-caption {
+            padding: 20px;
+        }
+
+        .gallery-caption h3 {
+            color: #10231f;
+            font-size: 20px;
+            margin-bottom: 7px;
+        }
+
+        .gallery-caption p {
+            color: #718078;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .gallery-home {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .image-error {
+            display: none;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            color: #193b32;
+            background: #e2ebe2;
+        }
+
+        @media(max-width: 700px) {
+            .gallery-page {
+                padding: 35px 5% 50px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-image {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">H</span>
+            <span>HOSTEL<span class="logo-highlight">HUB</span></span>
+        </a>
+
+        <nav class="navigation">
+            <a href="index.html">Home</a>
+            <a href="block.html">Blocks</a>
+            <a href="room-pics.html" class="active">Room Pics</a>
+            <a href="room-booking.html">Room Booking</a>
+            <a href="manage-students.html">Students</a>
+        </nav>
+    </header>
+
+    <main class="gallery-page">
+
+        <section class="gallery-heading">
+            <p class="eyebrow">HOSTEL PHOTO GALLERY</p>
+            <h1>Explore Our Rooms</h1>
+            <p>Select a block to view its floor corridor and room interior.</p>
+        </section>
+
+        <div class="block-tabs">
+            <button type="button" data-block="A" onclick="showGallery('A')">Block A</button>
+            <button type="button" data-block="B" onclick="showGallery('B')">Block B</button>
+            <button type="button" data-block="C" onclick="showGallery('C')">Block C</button>
+        </div>
+
+        <section>
+            <div class="gallery-title">
+                <h2 id="gallery-block-title">Block A</h2>
+                <p id="gallery-description">View the floor corridor and room interior.</p>
+            </div>
+
+            <div class="gallery-grid">
+
+                <!-- FLOOR CORRIDOR / OUTER VIEW -->
+                <article class="gallery-card">
+                    <div class="gallery-image">
+                        <img id="outer-image"
+                             src="/images/bolck-a-outer.jpg"
+                             alt="Block A floor corridor"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                        <div class="image-error">
+                            Corridor photo could not be loaded. Check the filename in the images folder.
+                        </div>
+                    </div>
+
+                    <div class="gallery-caption">
+                        <h3>Floor Corridor</h3>
+                        <p>View the floor corridor and the entrance doors of the hostel rooms.</p>
+                    </div>
+                </article>
+
+                <!-- ROOM INTERIOR -->
+                <article class="gallery-card">
+                    <div class="gallery-image">
+                        <img id="inner-image"
+                             src="/images/bkock-a-room.jpg"
+                             alt="Block A room interior"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                        <div class="image-error">
+                            Room photo could not be loaded. Check the filename in the images folder.
+                        </div>
+                    </div>
+
+                    <div class="gallery-caption">
+                        <h3>Room Interior</h3>
+                        <p>View the inside of the room, including its furniture and facilities.</p>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <div class="gallery-home">
+            <a href="index.html" class="primary-button">&#8592; Go to Homepage</a>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <a href="index.html" class="footer-home">⌂ Go to Homepage</a>
+        <p>&copy; <span id="current-year"></span> Hostel Management System.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script>
+        // These filenames match the names shown in your VS Code screenshot.
+        const galleryImages = {
+            A: {
+                outer: "/images/bolck-a-outer.jpg",
+                inner: "/images/bkock-a-room.jpg"
+            },
+            B: {
+                outer: "/images/bolck-b-outer.jpg",
+                inner: "/images/bkock-b-room.jpg"
+            },
+            C: {
+                outer: "/images/bolck-c-outer.jpg",
+                inner: "/images/bkock-c-room.jpg"
+            }
+        };
+
+        function showGallery(block) {
+            const images = galleryImages[block];
+
+            if (!images) return;
+
+            document.getElementById("gallery-block-title").textContent =
+                "Block " + block;
+
+            document.getElementById("gallery-description").textContent =
+                "Floor corridor and room interior photos for Block " + block + ".";
+
+            const outer = document.getElementById("outer-image");
+            const inner = document.getElementById("inner-image");
+
+            // Reset image error placeholders when switching blocks.
+            [outer, inner].forEach(img => {
+                img.style.display = "block";
+                img.nextElementSibling.style.display = "none";
+            });
+
+            outer.src = images.outer;
+            inner.src = images.inner;
+
+            outer.alt = "Block " + block + " floor corridor";
+            inner.alt = "Block " + block + " room interior";
+
+            document.querySelectorAll(".block-tabs button").forEach(button => {
+                button.classList.toggle(
+                    "selected",
+                    button.dataset.block === block
+                );
+            });
+        }
+
+        // Show Block A when the page first opens.
+        showGallery("A");
+
+        // Set the footer year automatically.
+        document.getElementById("current-year").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+</html>
+```

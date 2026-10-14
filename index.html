@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hostel Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">H</span>
+            <span>HOSTEL<span class="logo-highlight">HUB</span></span>
+        </a>
+
+        <nav class="navigation">
+            <a href="index.html" class="active">Home</a>
+            <a href="block.html">Blocks</a>
+            <a href="room-pics.html">Room Pics</a>
+            <a href="room-booking.html">Room Booking</a>
+            <a href="manage-students.html">Students</a>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <p class="eyebrow">YOUR COMFORT, OUR PRIORITY</p>
+
+                <h1>
+                    Welcome to Your
+                    <span>Hostel Management</span>
+                    System
+                </h1>
+
+                <p class="hero-description">
+                    Manage hostel blocks, explore rooms, book accommodation,
+                    and manage student details — all in one place.
+                </p>
+
+                <a href="block.html" class="primary-button">
+                    Explore Our Blocks &#8594;
+                </a>
+
+                <div class="hero-features">
+                    <span>✓ Easy Room Booking</span>
+                    <span>✓ Student Management</span>
+                </div>
+            </div>
+
+            <!-- HERO IMAGE: Replace hostel-main.jpg with your photo -->
+            <div class="hero-image image-container">
+                <div class="image-placeholder">
+                    <span class="placeholder-icon">🏢</span>
+                    <p>Hostel Building Photo</p>
+                    <small>images/hostel-main.jpg</small>
+                </div>
+
+                <img
+                    src="/images/hostel-main.jpg"
+                    alt="Hostel building"
+                    onerror="this.style.display='none'"
+                >
+
+                <div class="image-label">
+                    <span class="status-dot"></span>
+                    Your Hostel, Your Home
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES SECTION -->
+        <section class="services" id="services">
+            <div class="section-heading">
+                <p class="eyebrow">EXPLORE OUR SERVICES</p>
+                <h2>Everything You Need, In One Place</h2>
+                <p>
+                    Choose a service below to get started with hostel management.
+                </p>
+            </div>
+
+            <div class="service-grid">
+
+                <!-- CARD 1: BLOCK -->
+                <a href="block.html" class="service-card">
+                    <div class="card-image image-container">
+                        <div class="image-placeholder">
+                            <span class="placeholder-icon">🏢</span>
+                            <p>Block Building Photo</p>
+                            <small>images/block.jpg</small>
+                        </div>
+
+                        <img
+                            src="/images/block.jpg"
+                            alt="Hostel blocks"
+                            onerror="this.style.display='none'"
+                        >
+
+                        <span class="card-number">01</span>
+                    </div>
+
+                    <div class="card-content">
+                        <span class="card-category">ACCOMMODATION</span>
+                        <h3>Block</h3>
+                        <p>
+                            Explore Block A, Block B, and Block C.
+                            Check floors, rooms, occupancy, and vacancies.
+                        </p>
+                        <span class="card-link">
+                            Explore Blocks <span>&#8594;</span>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- CARD 2: ROOM PICS -->
+                <a href="room-pics.html" class="service-card">
+                    <div class="card-image image-container">
+                        <div class="image-placeholder">
+                            <span class="placeholder-icon">🛏️</span>
+                            <p>Room Interior Photo</p>
+                            <small>images/room-pics.jpg</small>
+                        </div>
+
+                        <img
+                            src="/images/roompics.jpg"
+                            alt="Hostel room interior"
+                            onerror="this.style.display='none'"
+                        >
+
+                        <span class="card-number">02</span>
+                    </div>
+
+                    <div class="card-content">
+                        <span class="card-category">PHOTO GALLERY</span>
+                        <h3>Room Pics</h3>
+                        <p>
+                            View hostel exteriors, corridors, and room
+                            interiors for all three blocks.
+                        </p>
+                        <span class="card-link">
+                            View Gallery <span>&#8594;</span>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- CARD 3: ROOM BOOKING -->
+                <a href="room-booking.html" class="service-card">
+                    <div class="card-image image-container">
+                        <div class="image-placeholder">
+                            <span class="placeholder-icon">🔑</span>
+                            <p>Room Booking Photo</p>
+                            <small>images/room-booking.jpg</small>
+                        </div>
+
+                        <img
+                            src="/images/bolck-a-outer.jpg"
+                            alt="Student hostel accommodation"
+                            onerror="this.style.display='none'"
+                        >
+
+                        <span class="card-number">03</span>
+                    </div>
+
+                    <div class="card-content">
+                        <span class="card-category">RESERVATIONS</span>
+                        <h3>Room Booking</h3>
+                        <p>
+                            Find vacant rooms, check AC facilities,
+                            and register students for accommodation.
+                        </p>
+                        <span class="card-link">
+                            Book a Room <span>&#8594;</span>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- CARD 4: MANAGE STUDENTS -->
+                <a href="manage-students.html" class="service-card">
+                    <div class="card-image image-container">
+                        <div class="image-placeholder">
+                            <span class="placeholder-icon">👨‍🎓</span>
+                            <p>Student Management Photo</p>
+                            <small>images/manage-students.jpg</small>
+                        </div>
+
+                        <img
+                            src="/images/students.jpg"
+                            alt="Student accommodation management"
+                            onerror="this.style.display='none'"
+                        >
+
+                        <span class="card-number">04</span>
+                    </div>
+
+                    <div class="card-content">
+                        <span class="card-category">ADMINISTRATION</span>
+                        <h3>Manage Students</h3>
+                        <p>
+                            Find students by block, floor, and room.
+                            Update student details or remove records.
+                        </p>
+                        <span class="card-link">
+                            Manage Students <span>&#8594;</span>
+                        </span>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- BOTTOM INFORMATION SECTION -->
+        <section class="bottom-banner">
+            <div>
+                <p class="eyebrow">SIMPLE. ORGANIZED. EFFICIENT.</p>
+                <h2>Better Hostel Management Starts Here.</h2>
+                <h2>!!! STUDENT CAN CHANGE ROOM or FLOOR BUT NOT BLOCK !!!</h2>
+                <p>
+                    Everything your hostel needs to stay organized.
+                </p>
+            </div>
+
+            <a href="room-booking.html" class="primary-button">
+                Get Started &#8594;
+            </a>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <a href="index.html" class="footer-home">⌂ Go to Homepage</a>
+
+        <p>
+            &copy; <span id="current-year"></span>
+            Hostel Management System. All rights reserved.
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

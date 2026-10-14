@@ -1,0 +1,913 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students | Hostel Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #eaf0f8, #dce7f5);
+            color: #243047;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #172b4d;
+            color: white;
+            padding: 22px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .home-btn {
+            background: white;
+            color: #172b4d;
+            text-decoration: none;
+            padding: 11px 18px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .home-btn:hover {
+            background: #dce7f5;
+        }
+
+        .container {
+            width: min(950px, 92%);
+            margin: 35px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            margin-bottom: 22px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(25, 45, 75, 0.10);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #172b4d;
+        }
+
+        .subtitle {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+            color: #243047;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        input[readonly] {
+            background: #f1f5f9;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 13px 20px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .update-btn {
+            background: #1769aa;
+            color: white;
+        }
+
+        .update-btn:hover:not(:disabled) {
+            background: #12548a;
+        }
+
+        .delete-btn {
+            background: #b42318;
+            color: white;
+        }
+
+        .delete-btn:hover:not(:disabled) {
+            background: #8f1d14;
+        }
+
+        .secondary-btn {
+            background: #e2e8f0;
+            color: #243047;
+        }
+
+        .notice {
+            display: none;
+            padding: 13px;
+            margin-top: 18px;
+            border-radius: 7px;
+            line-height: 1.5;
+        }
+
+        .notice.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .notice.info {
+            display: block;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .student-details {
+            display: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        /* Confirmation and result pop-ups */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.65);
+            justify-content: center;
+            align-items: center;
+            padding: 18px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            width: min(430px, 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-icon {
+            font-size: 44px;
+            margin-bottom: 12px;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 12px;
+        }
+
+        .modal-box p {
+            color: #64748b;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .success-btn {
+            background: #15803d;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 21px;
+            }
+
+            .container {
+                margin: 20px auto;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .buttons button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Manage Students</h1>
+        <a class="home-btn" href="index.html">⌂ Go to Homepage</a>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>Select Student</h2>
+            <p class="subtitle">
+                Choose a block and select a student to view or update their details.
+            </p>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="blockSelect">Select Block</label>
+                    <select id="blockSelect">
+                        <option value="">-- Select Block --</option>
+                        <option value="A">Block A</option>
+                        <option value="B">Block B</option>
+                        <option value="C">Block C</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="studentSelect">Select Student</label>
+                    <select id="studentSelect" disabled>
+                        <option value="">-- Select Student --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="listNotice" class="notice" role="status"></div>
+        </section>
+
+        <section class="card student-details" id="detailsCard">
+            <h2>Student Information</h2>
+            <p class="subtitle">
+                Update the student's details below. The student's block cannot be changed here.
+            </p>
+
+            <form id="studentForm">
+                <input type="hidden" id="studentId">
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="studentName">Student Name</label>
+                        <input id="studentName" type="text"
+                               maxlength="100" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="rollNumber">Roll Number</label>
+                        <input id="rollNumber" type="text"
+                               maxlength="30" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">Phone Number</label>
+                        <input id="phone" type="tel"
+                               maxlength="15" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="studentBlock">Block</label>
+                        <input id="studentBlock" type="text" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label for="floorSelect">Select Floor</label>
+                        <select id="floorSelect" required>
+                            <option value="">-- Select Floor --</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="roomSelect">Select Room</label>
+                        <select id="roomSelect" required disabled>
+                            <option value="">-- Select Room --</option>
+                        </select>
+                    </div>
+
+                    <div class="field full-width">
+                        <label for="currentRoom">Current Room Information</label>
+                        <input id="currentRoom" type="text" readonly>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="update-btn" id="updateBtn" type="submit">
+                        Update Student
+                    </button>
+
+                    <button class="delete-btn" id="deleteBtn" type="button">
+                        Delete Student
+                    </button>
+
+                    <button class="secondary-btn" id="clearBtn" type="button">
+                        Clear Selection
+                    </button>
+                </div>
+
+                <div id="formNotice" class="notice" role="status"></div>
+            </form>
+        </section>
+
+        <section class="card empty-state" id="emptyState">
+            Select a block and student to display student information here.
+        </section>
+    </main>
+
+    <footer>
+        Hostel Management System
+    </footer>
+
+    <!-- Reusable confirmation/success modal -->
+    <div class="modal" id="modal" role="dialog"
+         aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-box">
+            <div class="modal-icon" id="modalIcon">ℹ️</div>
+            <h2 id="modalTitle">Confirmation</h2>
+            <p id="modalMessage"></p>
+            <div class="modal-actions" id="modalActions"></div>
+        </div>
+    </div>
+
+    <script>
+        const API = "/api";
+
+        const blockSelect = document.getElementById("blockSelect");
+        const studentSelect = document.getElementById("studentSelect");
+        const detailsCard = document.getElementById("detailsCard");
+        const emptyState = document.getElementById("emptyState");
+        const studentForm = document.getElementById("studentForm");
+        const floorSelect = document.getElementById("floorSelect");
+        const roomSelect = document.getElementById("roomSelect");
+        const currentRoom = document.getElementById("currentRoom");
+        const listNotice = document.getElementById("listNotice");
+        const formNotice = document.getElementById("formNotice");
+        const updateBtn = document.getElementById("updateBtn");
+        const deleteBtn = document.getElementById("deleteBtn");
+
+        let students = [];
+        let rooms = [];
+        let selectedStudent = null;
+        let modalResolver = null;
+
+        function showNotice(element, message, type = "error") {
+            element.textContent = message;
+            element.className = "notice " + type;
+        }
+
+        function clearNotice(element) {
+            element.textContent = "";
+            element.className = "notice";
+        }
+
+        async function apiRequest(url, options = {}) {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    ...(options.body ? {
+                        "Content-Type": "application/json"
+                    } : {}),
+                    ...(options.headers || {})
+                }
+            });
+
+            const text = await response.text();
+            let data = {};
+
+            if (text) {
+                try {
+                    data = JSON.parse(text);
+                } catch {
+                    data = { message: text };
+                }
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    data.error || data.message ||
+                    "The request failed. Please try again."
+                );
+            }
+
+            return data;
+        }
+
+        function hideStudentDetails() {
+            selectedStudent = null;
+            detailsCard.style.display = "none";
+            emptyState.style.display = "block";
+            studentForm.reset();
+            document.getElementById("studentId").value = "";
+            floorSelect.innerHTML =
+                '<option value="">-- Select Floor --</option>';
+            roomSelect.innerHTML =
+                '<option value="">-- Select Room --</option>';
+            roomSelect.disabled = true;
+            clearNotice(formNotice);
+        }
+
+        function closeModal(result = false) {
+            document.getElementById("modal").classList.remove("show");
+
+            if (modalResolver) {
+                const resolve = modalResolver;
+                modalResolver = null;
+                resolve(result);
+            }
+        }
+
+        function showModal({
+            icon = "ℹ️",
+            title,
+            message,
+            confirmText = "OK",
+            cancelText = null,
+            confirmClass = "success-btn"
+        }) {
+            const modal = document.getElementById("modal");
+            const actions = document.getElementById("modalActions");
+
+            document.getElementById("modalIcon").textContent = icon;
+            document.getElementById("modalTitle").textContent = title;
+            document.getElementById("modalMessage").textContent = message;
+            actions.replaceChildren();
+
+            return new Promise(resolve => {
+                modalResolver = resolve;
+
+                if (cancelText) {
+                    const cancel = document.createElement("button");
+                    cancel.type = "button";
+                    cancel.className = "secondary-btn";
+                    cancel.textContent = cancelText;
+                    cancel.addEventListener("click", () => closeModal(false));
+                    actions.appendChild(cancel);
+                }
+
+                const confirm = document.createElement("button");
+                confirm.type = "button";
+                confirm.className = confirmClass;
+                confirm.textContent = confirmText;
+                confirm.addEventListener("click", () => closeModal(true));
+                actions.appendChild(confirm);
+
+                modal.classList.add("show");
+                confirm.focus();
+            });
+        }
+
+        async function loadStudents() {
+            hideStudentDetails();
+            clearNotice(listNotice);
+
+            const block = blockSelect.value;
+            studentSelect.innerHTML =
+                '<option value="">-- Select Student --</option>';
+            studentSelect.disabled = true;
+            students = [];
+
+            if (!block) return;
+
+            try {
+                const data = await apiRequest(
+                    `${API}/students?block=${encodeURIComponent(block)}`
+                );
+
+                students = Array.isArray(data)
+                    ? data
+                    : (data.students || []);
+
+                students.forEach(student => {
+                    const option = document.createElement("option");
+                    option.value = student.student_id;
+                    option.textContent =
+                        `${student.student_name} (${student.roll_number})`;
+                    studentSelect.appendChild(option);
+                });
+
+                studentSelect.disabled = false;
+
+                if (students.length === 0) {
+                    showNotice(
+                        listNotice,
+                        "No students were found in this block.",
+                        "info"
+                    );
+                }
+            } catch (error) {
+                showNotice(
+                    listNotice,
+                    "Unable to load students: " + error.message
+                );
+            }
+        }
+
+        async function loadRooms(block, floor, preferredRoomId = null) {
+            roomSelect.innerHTML =
+                '<option value="">Loading rooms...</option>';
+            roomSelect.disabled = true;
+
+            const data = await apiRequest(
+                `${API}/rooms?block=${encodeURIComponent(block)}` +
+                `&floor=${encodeURIComponent(floor)}`
+            );
+
+            rooms = Array.isArray(data) ? data : (data.rooms || []);
+            roomSelect.innerHTML =
+                '<option value="">-- Select Room --</option>';
+
+            rooms.forEach(room => {
+                const option = document.createElement("option");
+                option.value = room.room_id;
+
+                const capacity = Number(room.capacity || 0);
+                const occupied = Number(room.occupied || 0);
+                const isCurrentRoom = selectedStudent &&
+                    Number(room.room_id) === Number(selectedStudent.room_id);
+
+                // A student's current room remains selectable even if full.
+                const isFull = occupied >= capacity && !isCurrentRoom;
+
+                option.textContent =
+                    `${room.room_number} (${Math.max(0, capacity - occupied)} vacant)`;
+
+                option.disabled = isFull;
+                roomSelect.appendChild(option);
+            });
+
+            roomSelect.disabled = false;
+
+            if (preferredRoomId != null) {
+                const option = Array.from(roomSelect.options).find(
+                    item => Number(item.value) === Number(preferredRoomId)
+                );
+
+                if (option) {
+                    option.selected = true;
+                } else {
+                    roomSelect.value = "";
+                }
+            }
+
+            updateCurrentRoom();
+        }
+
+        function updateCurrentRoom() {
+            const floor = floorSelect.value;
+            const roomId = roomSelect.value;
+
+            const room = rooms.find(
+                item => Number(item.room_id) === Number(roomId)
+            );
+
+            if (!floor || !room) {
+                currentRoom.value = "";
+                return;
+            }
+
+            currentRoom.value =
+                `Floor ${floor} | Room ${room.room_number} | ` +
+                `${room.ac_type || "AC type not specified"}`;
+        }
+
+        async function selectStudent() {
+            clearNotice(formNotice);
+            const id = studentSelect.value;
+
+            if (!id) {
+                hideStudentDetails();
+                return;
+            }
+
+            const student = students.find(
+                item => Number(item.student_id) === Number(id)
+            );
+
+            if (!student) {
+                showNotice(formNotice, "Student information was not found.");
+                return;
+            }
+
+            selectedStudent = student;
+            detailsCard.style.display = "block";
+            emptyState.style.display = "none";
+
+            document.getElementById("studentId").value = student.student_id;
+            document.getElementById("studentName").value =
+                student.student_name || "";
+            document.getElementById("rollNumber").value =
+                student.roll_number || "";
+            document.getElementById("phone").value = student.phone || "";
+            document.getElementById("studentBlock").value =
+                "Block " + student.block_name;
+
+            const floor = Number(student.floor_number);
+            floorSelect.innerHTML =
+                '<option value="">-- Select Floor --</option>';
+
+            const maxFloors = {
+                A: 5,
+                B: 4,
+                C: 6
+            }[student.block_name] || 6;
+
+            for (let number = 1; number <= maxFloors; number++) {
+                const option = document.createElement("option");
+                option.value = number;
+                option.textContent = `Floor ${number}`;
+                floorSelect.appendChild(option);
+            }
+
+            floorSelect.value = String(floor);
+
+            try {
+                await loadRooms(
+                    student.block_name,
+                    floor,
+                    student.room_id
+                );
+            } catch (error) {
+                showNotice(
+                    formNotice,
+                    "Unable to load rooms: " + error.message
+                );
+            }
+        }
+
+        blockSelect.addEventListener("change", loadStudents);
+        studentSelect.addEventListener("change", selectStudent);
+
+        floorSelect.addEventListener("change", async () => {
+            if (!selectedStudent || !floorSelect.value) {
+                roomSelect.innerHTML =
+                    '<option value="">-- Select Room --</option>';
+                roomSelect.disabled = true;
+                updateCurrentRoom();
+                return;
+            }
+
+            try {
+                await loadRooms(
+                    selectedStudent.block_name,
+                    floorSelect.value
+                );
+            } catch (error) {
+                showNotice(
+                    formNotice,
+                    "Unable to load rooms: " + error.message
+                );
+            }
+        });
+
+        roomSelect.addEventListener("change", updateCurrentRoom);
+
+        studentForm.addEventListener("submit", async event => {
+            event.preventDefault();
+            clearNotice(formNotice);
+
+            if (!selectedStudent) {
+                showNotice(formNotice, "Please select a student first.");
+                return;
+            }
+
+            const studentName =
+                document.getElementById("studentName").value.trim();
+            const rollNumber =
+                document.getElementById("rollNumber").value.trim();
+            const phone =
+                document.getElementById("phone").value.trim();
+            const floorNumber = Number(floorSelect.value);
+            const roomId = Number(roomSelect.value);
+
+            if (!studentName || !rollNumber || !phone ||
+                !floorNumber || !roomId) {
+                showNotice(
+                    formNotice,
+                    "Please complete all fields and select a floor and room."
+                );
+                return;
+            }
+
+            if (!/^[0-9+()\-\s]{7,15}$/.test(phone)) {
+                showNotice(
+                    formNotice,
+                    "Enter a valid phone number (7–15 characters)."
+                );
+                return;
+            }
+
+            const room = rooms.find(
+                item => Number(item.room_id) === roomId
+            );
+
+            if (!room) {
+                showNotice(formNotice, "Please select a valid room.");
+                return;
+            }
+
+            const confirmed = await showModal({
+                icon: "✏️",
+                title: "Confirm Update",
+                message:
+                    `Update the details for ${studentName} ` +
+                    `(${rollNumber}) and assign room ${room.room_number}?`,
+                confirmText: "Yes, Update",
+                cancelText: "Cancel"
+            });
+
+            if (!confirmed) return;
+
+            updateBtn.disabled = true;
+
+            try {
+                const result = await apiRequest(
+                    `${API}/students/${selectedStudent.student_id}`,
+                    {
+                        method: "PUT",
+                        body: JSON.stringify({
+                            student_name: studentName,
+                            roll_number: rollNumber,
+                            phone,
+                            floor_number: floorNumber,
+                            room_id: roomId
+                        })
+                    }
+                );
+
+                await showModal({
+                    icon: "✅",
+                    title: "Student Updated Successfully",
+                    message:
+                        result.message ||
+                        `${studentName}'s details have been updated successfully.`,
+                    confirmText: "OK"
+                });
+
+                await loadStudents();
+
+                const updatedId = String(
+                    result.student_id || idFromSelected()
+                );
+
+                studentSelect.value = updatedId;
+                await selectStudent();
+
+            } catch (error) {
+                showNotice(
+                    formNotice,
+                    "Update failed: " + error.message
+                );
+            } finally {
+                updateBtn.disabled = false;
+            }
+        });
+
+        function idFromSelected() {
+            return selectedStudent
+                ? selectedStudent.student_id
+                : "";
+        }
+
+        deleteBtn.addEventListener("click", async () => {
+            if (!selectedStudent) {
+                showNotice(formNotice, "Please select a student first.");
+                return;
+            }
+
+            const studentId = selectedStudent.student_id;
+            const studentName =
+                document.getElementById("studentName").value;
+            const rollNumber =
+                document.getElementById("rollNumber").value;
+
+            const confirmed = await showModal({
+                icon: "⚠️",
+                title: "Delete Student?",
+                message:
+                    `Are you sure you want to permanently delete ` +
+                    `${studentName} (${rollNumber})? This action cannot be undone.`,
+                confirmText: "Yes, Delete",
+                cancelText: "Cancel",
+                confirmClass: "delete-btn"
+            });
+
+            if (!confirmed) return;
+
+            deleteBtn.disabled = true;
+
+            try {
+                const result = await apiRequest(
+                    `${API}/students/${studentId}`,
+                    { method: "DELETE" }
+                );
+
+                hideStudentDetails();
+
+                await showModal({
+                    icon: "✅",
+                    title: "Student Deleted Successfully",
+                    message:
+                        result.message ||
+                        `${studentName} has been deleted successfully.`,
+                    confirmText: "OK"
+                });
+
+                await loadStudents();
+
+            } catch (error) {
+                showNotice(
+                    formNotice,
+                    "Delete failed: " + error.message
+                );
+            } finally {
+                deleteBtn.disabled = false;
+            }
+        });
+
+        document.getElementById("clearBtn").addEventListener("click", () => {
+            studentSelect.value = "";
+            hideStudentDetails();
+        });
+
+        // Close a modal with Escape, treating it as cancellation.
+        document.addEventListener("keydown", event => {
+            if (
+                event.key === "Escape" &&
+                document.getElementById("modal").classList.contains("show")
+            ) {
+                closeModal(false);
+            }
+        });
+    </script>
+</body>
+</html>

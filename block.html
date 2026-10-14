@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Blocks | HostelHub</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .blocks-page {
+            padding: 45px 6% 65px;
+        }
+
+        .blocks-heading {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .blocks-heading h1 {
+            color: #10231f;
+            font-size: clamp(30px, 4vw, 42px);
+            margin-bottom: 12px;
+        }
+
+        .blocks-heading p {
+            color: #718078;
+            line-height: 1.7;
+        }
+
+        .block-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .block-card {
+            background: #fff;
+            border: 1px solid #e6eae5;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 5px 18px rgba(16, 35, 31, .05);
+            transition: transform .25s ease, box-shadow .25s ease;
+        }
+
+        .block-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px rgba(16, 35, 31, .12);
+        }
+
+        .block-photo {
+            position: relative;
+            height: 210px;
+            overflow: hidden;
+            background: #dce8df;
+        }
+
+        .block-photo img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .block-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: #193b32;
+            background: linear-gradient(135deg, #e2ebe2, #cbdcd0);
+            text-align: center;
+        }
+
+        .block-placeholder span {
+            font-size: 38px;
+        }
+
+        .block-placeholder strong {
+            font-size: 15px;
+        }
+
+        .block-placeholder small {
+            font-size: 11px;
+        }
+
+        .block-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 2;
+            padding: 7px 12px;
+            border-radius: 6px;
+            background: #10231f;
+            color: #d9b66b;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .block-info {
+            padding: 23px;
+        }
+
+        .block-info h2 {
+            color: #10231f;
+            font-size: 25px;
+            margin: 0 0 5px;
+        }
+
+        .block-subtitle {
+            color: #718078;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .block-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            padding: 13px 10px;
+            background: #f4f7f2;
+            border-radius: 8px;
+        }
+
+        .stat-box span {
+            display: block;
+            color: #718078;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        .stat-box strong {
+            color: #193b32;
+            font-size: 21px;
+        }
+
+        .facility-title {
+            color: #193b32;
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .facility-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid #edf0ec;
+            color: #718078;
+            font-size: 12px;
+        }
+
+        .facility-row strong {
+            color: #263b35;
+            text-align: right;
+        }
+
+        .block-button {
+            display: block;
+            width: 100%;
+            margin-top: 21px;
+            padding: 12px;
+            border: none;
+            border-radius: 7px;
+            background: #398365;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: background .2s ease;
+        }
+
+        .block-button:hover {
+            background: #10231f;
+        }
+
+        .block-note {
+            margin-top: 30px;
+            padding: 17px;
+            border-left: 4px solid #d9b66b;
+            border-radius: 5px;
+            background: #fff;
+            color: #718078;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .block-home {
+            display: flex;
+            justify-content: center;
+            margin-top: 35px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Student list section */
+        .student-section {
+            display: none;
+            margin-top: 35px;
+            padding: 25px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 5px 18px rgba(16, 35, 31, .08);
+        }
+
+        .student-section.visible {
+            display: block;
+        }
+
+        .student-section h2 {
+            color: #10231f;
+            margin-top: 0;
+        }
+
+        .student-summary {
+            color: #718078;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .student-table th {
+            background: #193b32;
+            color: #fff;
+            text-align: left;
+            padding: 14px 12px;
+            font-size: 13px;
+        }
+
+        .student-table td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #e6eae5;
+            color: #263b35;
+            font-size: 14px;
+        }
+
+        .student-table tbody tr:nth-child(even) {
+            background: #f5f8f4;
+        }
+
+        .student-table tbody tr:hover {
+            background: #eaf3eb;
+        }
+
+        .student-count {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-bottom: 15px;
+            background: #e2f2e7;
+            color: #21633e;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .student-message {
+            padding: 20px;
+            margin-top: 12px;
+            background: #f4f7f2;
+            color: #52645b;
+            border-radius: 8px;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .back-button {
+            border: none;
+            border-radius: 7px;
+            padding: 12px 18px;
+            background: #193b32;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .back-button:hover {
+            background: #398365;
+        }
+
+        .error-message {
+            color: #991b1b;
+            background: #fee2e2;
+        }
+
+        @media (max-width: 1000px) {
+            .block-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 650px) {
+            .blocks-page {
+                padding: 30px 5% 45px;
+            }
+
+            .block-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .block-photo {
+                height: 230px;
+            }
+
+            .student-section {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">H</span>
+            <span>HOSTEL<span class="logo-highlight">HUB</span></span>
+        </a>
+
+        <nav class="navigation">
+            <a href="index.html">Home</a>
+            <a href="block.html" class="active">Blocks</a>
+            <a href="room-pics.html">Room Pics</a>
+            <a href="room-booking.html">Room Booking</a>
+            <a href="manage-students.html">Students</a>
+        </nav>
+    </header>
+
+    <main class="blocks-page">
+
+        <!-- BLOCK CARDS -->
+        <section id="blocksView">
+            <div class="blocks-heading">
+                <p class="eyebrow">HOSTEL ACCOMMODATION</p>
+                <h1>Explore Our Hostel Blocks</h1>
+                <p>
+                    Choose a block to view its registered students,
+                    floors, rooms, facilities, and accommodation details.
+                </p>
+            </div>
+
+            <section class="block-grid">
+
+                <!-- BLOCK A -->
+                <article class="block-card">
+                    <div class="block-photo">
+                        <div class="block-placeholder">
+                            <span>🏢</span>
+                            <strong>Block A Building Photo</strong>
+                            <small>images/block-a.jpg</small>
+                        </div>
+                        <img src="/images/bolck-a-outer.jpg"
+                             alt="Block A hostel building"
+                             onerror="this.style.display='none'">
+                        <span class="block-badge">BLOCK A</span>
+                    </div>
+
+                    <div class="block-info">
+                        <h2>Block A</h2>
+                        <p class="block-subtitle">Single occupancy accommodation</p>
+
+                        <div class="block-stats">
+                            <div class="stat-box">
+                                <span>Total Rooms</span>
+                                <strong>30</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Total Floors</span>
+                                <strong>5</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Capacity per Room</span>
+                                <strong>1</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>AC Floors</span>
+                                <strong>2</strong>
+                            </div>
+                        </div>
+
+                        <p class="facility-title">BLOCK FACILITIES</p>
+                        <div class="facility-row">
+                            <span>Floors 1–3</span><strong>Non-AC</strong>
+                        </div>
+                        <div class="facility-row">
+                            <span>Floors 4–5</span><strong>AC</strong>
+                        </div>
+                        <div class="facility-row">
+                            <span>Rooms per floor</span><strong>6</strong>
+                        </div>
+
+                        <button class="block-button"
+                                type="button"
+                                data-block="A">
+                            View Block A Students &#8594;
+                        </button>
+                    </div>
+                </article>
+
+                <!-- BLOCK B -->
+                <article class="block-card">
+                    <div class="block-photo">
+                        <div class="block-placeholder">
+                            <span>🏢</span>
+                            <strong>Block B Building Photo</strong>
+                            <small>images/block-b.jpg</small>
+                        </div>
+                        <img src="/images/bolck-b-outer.jpg"
+                             alt="Block B hostel building"
+                             onerror="this.style.display='none'">
+                        <span class="block-badge">BLOCK B</span>
+                    </div>
+
+                    <div class="block-info">
+                        <h2>Block B</h2>
+                        <p class="block-subtitle">Four students per room</p>
+
+                        <div class="block-stats">
+                            <div class="stat-box">
+                                <span>Total Rooms</span>
+                                <strong>20</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Total Floors</span>
+                                <strong>4</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Capacity per Room</span>
+                                <strong>4</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>AC Floors</span>
+                                <strong>2</strong>
+                            </div>
+                        </div>
+
+                        <p class="facility-title">BLOCK FACILITIES</p>
+                        <div class="facility-row">
+                            <span>Floors 1–2</span><strong>Non-AC</strong>
+                        </div>
+                        <div class="facility-row">
+                            <span>Floors 3–4</span><strong>AC</strong>
+                        </div>
+                        <div class="facility-row">
+                            <span>Rooms per floor</span><strong>5</strong>
+                        </div>
+
+                        <button class="block-button"
+                                type="button"
+                                data-block="B">
+                            View Block B Students &#8594;
+                        </button>
+                    </div>
+                </article>
+
+                <!-- BLOCK C -->
+                <article class="block-card">
+                    <div class="block-photo">
+                        <div class="block-placeholder">
+                            <span>🏢</span>
+                            <strong>Block C Building Photo</strong>
+                            <small>images/block-c.jpg</small>
+                        </div>
+                        <img src="/images/bolck-c-outer.jpg"
+                             alt="Block C hostel building"
+                             onerror="this.style.display='none'">
+                        <span class="block-badge">BLOCK C</span>
+                    </div>
+
+                    <div class="block-info">
+                        <h2>Block C</h2>
+                        <p class="block-subtitle">Larger shared accommodation</p>
+
+                        <div class="block-stats">
+                            <div class="stat-box">
+                                <span>Total Rooms</span>
+                                <strong>18</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Total Floors</span>
+                                <strong>6</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Capacity per Room</span>
+                                <strong>8–10</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>AC Floors</span>
+                                <strong>3</strong>
+                            </div>
+                        </div>
+
+                        <p class="facility-title">BLOCK FACILITIES</p>
+                        <div class="facility-row">
+                            <span>Floors 1–3</span><strong>Non-AC</strong>
+                        </div>
+                        <div class="facility-row">
+                            <span>Floors 4–6</span><strong>AC</strong>
+                        </div>
+                        <div class="facility-row">
+                            <span>Rooms per floor</span><strong>3</strong>
+                        </div>
+
+                        <button class="block-button"
+                                type="button"
+                                data-block="C">
+                            View Block C Students &#8594;
+                        </button>
+                    </div>
+                </article>
+
+            </section>
+
+            <div class="block-note">
+                <strong>Note:</strong> Student details shown in the lists
+                are loaded from the hostel database. Only registered students
+                will appear in each block's list.
+            </div>
+        </section>
+
+        <!-- STUDENT LIST: DISPLAYED AFTER CLICKING A BLOCK -->
+        <section class="student-section" id="studentSection">
+            <h2 id="studentHeading">Block Students</h2>
+
+            <p class="student-summary" id="studentSummary">
+                Registered student information will appear here.
+            </p>
+
+            <div id="studentCount" class="student-count"></div>
+
+            <div class="table-wrapper">
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Roll Number</th>
+                            <th>Block</th>
+                            <th>Floor</th>
+                            <th>Room Number</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody"></tbody>
+                </table>
+            </div>
+
+            <div id="studentMessage" class="student-message" hidden></div>
+
+            <div class="block-home">
+                <button type="button" class="back-button" id="backButton">
+                    &#8592; Back to Blocks
+                </button>
+                <a href="index.html" class="primary-button">
+                    &#8962; Go to Homepage
+                </a>
+            </div>
+        </section>
+
+        <div class="block-home" id="homeButton">
+            <a href="index.html" class="primary-button">
+                &#8592; Go to Homepage
+            </a>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <a href="index.html" class="footer-home">⌂ Go to Homepage</a>
+        <p>&copy; <span id="current-year"></span> Hostel Management System.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script>
+        const blocksView = document.getElementById("blocksView");
+        const studentSection = document.getElementById("studentSection");
+        const studentHeading = document.getElementById("studentHeading");
+        const studentSummary = document.getElementById("studentSummary");
+        const studentCount = document.getElementById("studentCount");
+        const studentTableBody = document.getElementById("studentTableBody");
+        const studentMessage = document.getElementById("studentMessage");
+        const homeButton = document.getElementById("homeButton");
+
+        // Load and display the selected block's students.
+        async function showBlockStudents(block) {
+            studentHeading.textContent = "Block " + block + " Students";
+            studentSummary.textContent =
+                "Student name, roll number, floor, and room information for Block " +
+                block + ".";
+            studentCount.textContent = "Loading students...";
+            studentTableBody.replaceChildren();
+            studentMessage.hidden = true;
+            studentMessage.textContent = "";
+            studentMessage.classList.remove("error-message");
+
+            blocksView.style.display = "none";
+            homeButton.style.display = "none";
+            studentSection.classList.add("visible");
+
+            try {
+                const response = await fetch(
+                    "/api/students?block=" + encodeURIComponent(block)
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.error || result.message ||
+                        "Unable to load student information."
+                    );
+                }
+
+                const students = Array.isArray(result)
+                    ? result
+                    : (result.students || []);
+
+                studentCount.textContent =
+                    "Total Registered Students: " + students.length;
+
+                if (students.length === 0) {
+                    studentMessage.textContent =
+                        "No students are currently registered in Block " +
+                        block + ".";
+                    studentMessage.hidden = false;
+                    return;
+                }
+
+                students.forEach(student => {
+                    const row = document.createElement("tr");
+
+                    const values = [
+                        student.student_name,
+                        student.roll_number,
+                        "Block " + student.block_name,
+                        student.floor_number,
+                        student.room_number
+                    ];
+
+                    values.forEach(value => {
+                        const cell = document.createElement("td");
+                        cell.textContent =
+                            value === null || value === undefined || value === ""
+                                ? "—"
+                                : String(value);
+                        row.appendChild(cell);
+                    });
+
+                    studentTableBody.appendChild(row);
+                });
+
+            } catch (error) {
+                studentCount.textContent = "Unable to load students";
+                studentMessage.textContent =
+                    error.message +
+                    " Please check that the server is running and the " +
+                    "/api/students route is available.";
+                studentMessage.classList.add("error-message");
+                studentMessage.hidden = false;
+            }
+        }
+
+        document.querySelectorAll("[data-block]").forEach(button => {
+            button.addEventListener("click", () => {
+                showBlockStudents(button.dataset.block);
+            });
+        });
+
+        document.getElementById("backButton").addEventListener("click", () => {
+            studentSection.classList.remove("visible");
+            blocksView.style.display = "block";
+            homeButton.style.display = "flex";
+            studentTableBody.replaceChildren();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // Set the current year if script.js does not already set it.
+        const yearElement = document.getElementById("current-year");
+        if (yearElement && !yearElement.textContent) {
+            yearElement.textContent = new Date().getFullYear();
+        }
+    </script>
+
+</body>
+</html>
